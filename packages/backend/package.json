@@ -9,12 +9,15 @@
   },
   "scripts": {
     "dev": "convex dev",
-    "deploy": "convex deploy"
+    "deploy": "convex deploy",
+    "lint": "biome lint .",
+    "format": "biome format --write ."
   },
   "dependencies": {
     "convex": "^1.21.0"
   },
   "devDependencies": {
+    "@with-stef/config": "workspace:*",
     "typescript": "~5.9.2"
   }
 }
