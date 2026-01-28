@@ -1,5 +1,5 @@
 {
-  "name": "@repo/mobile",
+  "name": "@with-stef/mobile",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
@@ -10,7 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@repo/backend": "workspace:*",
+    "@with-stef/backend": "workspace:*",
     "convex": "^1.21.0",
     "expo": "~54.0.32",
     "expo-status-bar": "~3.0.9",
