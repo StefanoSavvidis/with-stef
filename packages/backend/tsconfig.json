@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["convex/**/*"],
+  "include": ["convex/**/*", "src/**/*"],
   "exclude": ["node_modules", "convex/_generated"]
 }

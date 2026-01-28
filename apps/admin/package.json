@@ -9,10 +9,11 @@
     "test": "vitest run",
     "format": "biome format --write .",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@with-stef/backend": "workspace:*",
+    "@convex-dev/better-auth": "^0.10.10",
     "@convex-dev/react-query": "0.1.0",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
@@ -23,16 +24,17 @@
     "@tanstack/react-router-ssr-query": "^1.131.7",
     "@tanstack/react-start": "^1.132.0",
     "@tanstack/router-plugin": "^1.132.0",
+    "@with-stef/backend": "workspace:*",
+    "better-auth": "^1.4.17",
     "convex": "^1.27.3",
     "lucide-react": "^0.561.0",
-    "nitro": "npm:nitro-nightly@latest",
+    "nitro": "npm:nitro-nightly@3.0.1-alpha.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.0.6",
     "vite-tsconfig-paths": "^6.0.2"
   },
   "devDependencies": {
-    "@with-stef/config": "workspace:*",
     "@biomejs/biome": "2.2.4",
     "@tanstack/devtools-vite": "^0.3.11",
     "@testing-library/dom": "^10.4.0",
@@ -41,6 +43,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "@with-stef/config": "workspace:*",
     "jsdom": "^27.0.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",

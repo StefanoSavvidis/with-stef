@@ -5,15 +5,19 @@
   "type": "module",
   "exports": {
     "./convex/_generated/api": "./convex/_generated/api.js",
-    "./convex/_generated/dataModel": "./convex/_generated/dataModel.d.ts"
+    "./convex/_generated/dataModel": "./convex/_generated/dataModel.d.ts",
+    "./auth-client": "./src/auth-client.ts"
   },
   "scripts": {
     "dev": "convex dev",
     "deploy": "convex deploy",
     "lint": "biome lint .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@convex-dev/better-auth": "^0.10.10",
+    "better-auth": "^1.4.17",
     "convex": "^1.21.0"
   },
   "devDependencies": {
