@@ -2,6 +2,10 @@
 	"$schema": "https://biomejs.dev/schemas/2.0.0/schema.json",
 	"extends": ["@with-stef/config/biome"],
 	"files": {
-		"includes": ["convex/**", "!convex/_generated/**"]
+		"includes": [
+			"convex/**",
+			"!convex/_generated/**",
+			"!convex/betterAuth/_generated/**"
+		]
 	}
 }

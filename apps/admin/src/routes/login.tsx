@@ -34,10 +34,7 @@ function AlreadyLoggedIn() {
 			>
 				Go to Dashboard
 			</button>
-			<button
-				type="button"
-				onClick={() => authClient.signOut()}
-			>
+			<button type="button" onClick={() => authClient.signOut()}>
 				Sign Out
 			</button>
 		</div>
@@ -89,13 +86,14 @@ function LoginForm() {
 	return (
 		<div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
 			<h1>{isSignUp ? "Sign Up" : "Sign In"}</h1>
-			<p style={{ color: "#666", marginBottom: "1.5rem" }}>
-				Admin Dashboard
-			</p>
+			<p style={{ color: "#666", marginBottom: "1.5rem" }}>Admin Dashboard</p>
 
 			<form onSubmit={handleSubmit}>
 				<div style={{ marginBottom: "1rem" }}>
-					<label htmlFor="email" style={{ display: "block", marginBottom: "0.5rem" }}>
+					<label
+						htmlFor="email"
+						style={{ display: "block", marginBottom: "0.5rem" }}
+					>
 						Email
 					</label>
 					<input
@@ -109,7 +107,10 @@ function LoginForm() {
 				</div>
 
 				<div style={{ marginBottom: "1rem" }}>
-					<label htmlFor="password" style={{ display: "block", marginBottom: "0.5rem" }}>
+					<label
+						htmlFor="password"
+						style={{ display: "block", marginBottom: "0.5rem" }}
+					>
 						Password
 					</label>
 					<input
@@ -124,9 +125,7 @@ function LoginForm() {
 				</div>
 
 				{error && (
-					<div style={{ color: "red", marginBottom: "1rem" }}>
-						{error}
-					</div>
+					<div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
 				)}
 
 				<button
@@ -140,9 +139,16 @@ function LoginForm() {
 				<button
 					type="button"
 					onClick={() => setIsSignUp(!isSignUp)}
-					style={{ width: "100%", padding: "0.5rem", background: "transparent", border: "1px solid #ccc" }}
+					style={{
+						width: "100%",
+						padding: "0.5rem",
+						background: "transparent",
+						border: "1px solid #ccc",
+					}}
 				>
-					{isSignUp ? "Already have an account? Sign In" : "Need an account? Sign Up"}
+					{isSignUp
+						? "Already have an account? Sign In"
+						: "Need an account? Sign Up"}
 				</button>
 			</form>
 		</div>

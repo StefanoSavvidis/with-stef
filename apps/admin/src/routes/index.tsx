@@ -1,5 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { Authenticated, Unauthenticated, AuthLoading, useQuery } from "convex/react"
+import {
+	Authenticated,
+	Unauthenticated,
+	AuthLoading,
+	useQuery,
+} from "convex/react"
 import { api } from "@with-stef/backend/convex/_generated/api"
 import { authClient } from "../lib/auth-client"
 import { useEffect } from "react"
@@ -41,7 +46,7 @@ function Dashboard() {
 			{user && (
 				<div>
 					<p>Welcome, {user.name ?? user.email}</p>
-					<p>Role: {(user as { role?: string }).role ?? "user"}</p>
+					<p>Role: {user.role ?? "user"}</p>
 					<button
 						type="button"
 						onClick={() => authClient.signOut()}

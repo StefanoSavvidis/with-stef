@@ -23,7 +23,7 @@ export default function HomeScreen() {
 					<Text style={styles.value}>{user.email}</Text>
 
 					<Text style={styles.label}>Role</Text>
-					<Text style={styles.value}>{(user as { role?: string }).role ?? "user"}</Text>
+					<Text style={styles.value}>{user.role ?? "user"}</Text>
 				</View>
 			)}
 
