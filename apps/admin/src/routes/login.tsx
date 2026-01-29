@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { useState } from "react"
+import { Authenticated, Unauthenticated } from "convex/react"
+import { useId, useState } from "react"
+import { Button, Card, Input } from "@/components/retroui"
 import { authClient } from "../lib/auth-client"
-import { Unauthenticated, Authenticated } from "convex/react"
 
 export const Route = createFileRoute("/login")({
 	component: LoginPage,
@@ -24,19 +25,19 @@ function AlreadyLoggedIn() {
 	const navigate = useNavigate()
 
 	return (
-		<div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-			<h1>Already logged in</h1>
-			<p>You are already logged in.</p>
-			<button
-				type="button"
-				onClick={() => navigate({ to: "/" })}
-				style={{ marginRight: "1rem" }}
-			>
-				Go to Dashboard
-			</button>
-			<button type="button" onClick={() => authClient.signOut()}>
-				Sign Out
-			</button>
+		<div className="min-h-screen flex items-center justify-center p-8">
+			<Card className="w-full max-w-md">
+				<Card.Header>
+					<Card.Title>Already logged in</Card.Title>
+					<Card.Description>You are already logged in.</Card.Description>
+				</Card.Header>
+				<Card.Content className="flex gap-3">
+					<Button onClick={() => navigate({ to: "/" })}>Go to Dashboard</Button>
+					<Button variant="secondary" onClick={() => authClient.signOut()}>
+						Sign Out
+					</Button>
+				</Card.Content>
+			</Card>
 		</div>
 	)
 }
@@ -48,6 +49,9 @@ function LoginForm() {
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 	const navigate = useNavigate()
+
+	const emailId = useId()
+	const passwordId = useId()
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -84,73 +88,70 @@ function LoginForm() {
 	}
 
 	return (
-		<div style={{ padding: "2rem", maxWidth: "400px", margin: "0 auto" }}>
-			<h1>{isSignUp ? "Sign Up" : "Sign In"}</h1>
-			<p style={{ color: "#666", marginBottom: "1.5rem" }}>Admin Dashboard</p>
+		<div className="min-h-screen flex items-center justify-center p-8">
+			<Card className="w-full max-w-md">
+				<Card.Header>
+					<Card.Title>{isSignUp ? "Sign Up" : "Sign In"}</Card.Title>
+					<Card.Description>Admin Dashboard</Card.Description>
+				</Card.Header>
+				<Card.Content>
+					<form onSubmit={handleSubmit} className="space-y-4">
+						<div>
+							<label htmlFor={emailId} className="block mb-2 font-medium">
+								Email
+							</label>
+							<Input
+								id={emailId}
+								type="email"
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								required
+								placeholder="you@example.com"
+							/>
+						</div>
 
-			<form onSubmit={handleSubmit}>
-				<div style={{ marginBottom: "1rem" }}>
-					<label
-						htmlFor="email"
-						style={{ display: "block", marginBottom: "0.5rem" }}
-					>
-						Email
-					</label>
-					<input
-						id="email"
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						required
-						style={{ width: "100%", padding: "0.5rem" }}
-					/>
-				</div>
+						<div>
+							<label htmlFor={passwordId} className="block mb-2 font-medium">
+								Password
+							</label>
+							<Input
+								id={passwordId}
+								type="password"
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								required
+								minLength={8}
+								placeholder="Enter password"
+							/>
+						</div>
 
-				<div style={{ marginBottom: "1rem" }}>
-					<label
-						htmlFor="password"
-						style={{ display: "block", marginBottom: "0.5rem" }}
-					>
-						Password
-					</label>
-					<input
-						id="password"
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						required
-						minLength={8}
-						style={{ width: "100%", padding: "0.5rem" }}
-					/>
-				</div>
+						{error && (
+							<div className="p-3 border-2 border-destructive bg-destructive/10 text-destructive rounded">
+								{error}
+							</div>
+						)}
 
-				{error && (
-					<div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
-				)}
+						<Button
+							type="submit"
+							disabled={loading}
+							className="w-full justify-center"
+						>
+							{loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
+						</Button>
 
-				<button
-					type="submit"
-					disabled={loading}
-					style={{ width: "100%", padding: "0.75rem", marginBottom: "1rem" }}
-				>
-					{loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
-				</button>
-
-				<button
-					type="button"
-					onClick={() => setIsSignUp(!isSignUp)}
-					style={{
-						width: "100%",
-						padding: "0.5rem",
-						background: "transparent",
-						border: "1px solid #ccc",
-					}}
-				>
-					{isSignUp
-						? "Already have an account? Sign In"
-						: "Need an account? Sign Up"}
-				</button>
-			</form>
+						<Button
+							type="button"
+							variant="outline"
+							onClick={() => setIsSignUp(!isSignUp)}
+							className="w-full justify-center"
+						>
+							{isSignUp
+								? "Already have an account? Sign In"
+								: "Need an account? Sign Up"}
+						</Button>
+					</form>
+				</Card.Content>
+			</Card>
 		</div>
 	)
 }

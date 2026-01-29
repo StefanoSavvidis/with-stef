@@ -1,5 +1,5 @@
-import { ConvexReactClient } from "convex/react"
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react"
+import { ConvexReactClient } from "convex/react"
 import { authClient } from "../../lib/auth-client"
 
 const CONVEX_URL = import.meta.env.VITE_CONVEX_URL
@@ -13,11 +13,17 @@ const convex = new ConvexReactClient(CONVEX_URL, {
 
 export default function AppConvexProvider({
 	children,
+	initialToken,
 }: {
 	children: React.ReactNode
+	initialToken?: string | null
 }) {
 	return (
-		<ConvexBetterAuthProvider client={convex} authClient={authClient}>
+		<ConvexBetterAuthProvider
+			client={convex}
+			authClient={authClient}
+			initialToken={initialToken}
+		>
 			{children}
 		</ConvexBetterAuthProvider>
 	)
