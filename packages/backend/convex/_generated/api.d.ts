@@ -9,7 +9,9 @@
  */
 
 import type * as auth from "../auth.js";
+import type * as functions from "../functions.js";
 import type * as http from "../http.js";
+import type * as trivia from "../trivia.js";
 
 import type {
   ApiFromModules,
@@ -19,7 +21,9 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
+  functions: typeof functions;
   http: typeof http;
+  trivia: typeof trivia;
 }>;
 
 /**
