@@ -22,6 +22,7 @@
     "convex-helpers": "^0.1.111"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
     "@with-stef/config": "workspace:*",
     "typescript": "~5.9.2"
   }

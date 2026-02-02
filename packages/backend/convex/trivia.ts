@@ -1,3 +1,4 @@
+import { paginationOptsValidator } from "convex/server"
 import { v } from "convex/values"
 import { query } from "./_generated/server"
 import { authComponent } from "./auth"
@@ -351,23 +352,37 @@ export const getGame = query({
 export const getLeaderboard = publicQuery({
 	args: {
 		gameId: v.id("triviaGames"),
+		paginationOpts: paginationOptsValidator,
+	},
+	handler: async (ctx, args) => {
+		const results = await ctx.db
+			.query("triviaParticipants")
+			.withIndex("by_game_and_score", (q) => q.eq("gameId", args.gameId))
+			.order("desc")
+			.paginate(args.paginationOpts)
+
+		return {
+			...results,
+			page: results.page.map((p) => ({
+				participantId: p._id,
+				userId: p.userId,
+				name: p.name,
+				score: p.score,
+			})),
+		}
+	},
+})
+
+export const getParticipantCount = publicQuery({
+	args: {
+		gameId: v.id("triviaGames"),
 	},
 	handler: async (ctx, args) => {
 		const participants = await ctx.db
 			.query("triviaParticipants")
 			.withIndex("by_game", (q) => q.eq("gameId", args.gameId))
 			.collect()
-
-		// Sort by score descending
-		participants.sort((a, b) => b.score - a.score)
-
-		return participants.map((p, index) => ({
-			rank: index + 1,
-			participantId: p._id,
-			userId: p.userId,
-			name: p.name,
-			score: p.score,
-		}))
+		return participants.length
 	},
 })
 

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router"
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router"
 import { api } from "@with-stef/backend/convex/_generated/api"
 import {
 	Authenticated,
@@ -7,12 +7,14 @@ import {
 	useQuery,
 } from "convex/react"
 import { useEffect } from "react"
-import { Button, Card, Text } from "@/components/retroui"
-import { authClient } from "../lib/auth-client"
+import { AdminSidebar } from "@/components/AdminSidebar"
+import { Text } from "@/components/retroui"
 
-export const Route = createFileRoute("/")({ component: App })
+export const Route = createFileRoute("/_admin")({
+	component: AdminLayout,
+})
 
-function App() {
+function AdminLayout() {
 	return (
 		<>
 			<AuthLoading>
@@ -24,7 +26,7 @@ function App() {
 				<RedirectToLogin />
 			</Unauthenticated>
 			<Authenticated>
-				<AuthenticatedContent />
+				<AdminContent />
 			</Authenticated>
 		</>
 	)
@@ -44,13 +46,13 @@ function RedirectToLogin() {
 	)
 }
 
-function AuthenticatedContent() {
+function AdminContent() {
 	const user = useQuery(api.auth.getCurrentUser)
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if (user?.role === "admin") {
-			navigate({ to: "/trivia" })
+		if (user && user.role !== "admin") {
+			navigate({ to: "/" })
 		}
 	}, [user, navigate])
 
@@ -63,8 +65,8 @@ function AuthenticatedContent() {
 		)
 	}
 
-	// Admin users get redirected
-	if (user.role === "admin") {
+	// Non-admin users get redirected
+	if (user.role !== "admin") {
 		return (
 			<div className="flex items-center justify-center min-h-[50vh]">
 				<Text>Redirecting...</Text>
@@ -72,25 +74,13 @@ function AuthenticatedContent() {
 		)
 	}
 
-	// Non-admin users see this
+	// Admin users see the layout
 	return (
-		<div className="flex items-center justify-center min-h-[50vh]">
-			<Card className="max-w-md">
-				<Card.Header>
-					<Card.Title>Admin Access Required</Card.Title>
-					<Card.Description>
-						This area is restricted to administrators only.
-					</Card.Description>
-				</Card.Header>
-				<Card.Content className="space-y-4">
-					<Text as="p" className="text-sm text-muted-foreground">
-						Signed in as {user.email}
-					</Text>
-					<Button variant="secondary" onClick={() => authClient.signOut()}>
-						Sign Out
-					</Button>
-				</Card.Content>
-			</Card>
+		<div className="flex min-h-[calc(100vh-57px)]">
+			<AdminSidebar />
+			<main className="flex-1 p-6">
+				<Outlet />
+			</main>
 		</div>
 	)
 }

@@ -9,7 +9,7 @@ export default defineSchema({
 			v.literal("live"),
 			v.literal("ended"),
 		),
-		createdBy: v.id("user"), // user ID from Better Auth component
+		createdBy: v.string(), // user ID from Better Auth component (string due to component boundary)
 	})
 		.index("by_status", ["status"])
 		.index("by_created_by", ["createdBy"]),
@@ -33,7 +33,7 @@ export default defineSchema({
 
 	triviaParticipants: defineTable({
 		gameId: v.id("triviaGames"),
-		userId: v.id("user"), // user ID from Better Auth component
+		userId: v.string(), // user ID from Better Auth component (string due to component boundary)
 		name: v.string(), // denormalized from user for leaderboard display
 		score: v.number(),
 	})
