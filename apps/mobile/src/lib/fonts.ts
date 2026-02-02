@@ -1,0 +1,6 @@
+export const fontHead = "ArchivoBlack_400Regular"
+export const fontSansLight = "SpaceGrotesk_300Light"
+export const fontSansRegular = "SpaceGrotesk_400Regular"
+export const fontSansMedium = "SpaceGrotesk_500Medium"
+export const fontSansSemiBold = "SpaceGrotesk_600SemiBold"
+export const fontSansBold = "SpaceGrotesk_700Bold"

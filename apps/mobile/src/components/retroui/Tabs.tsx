@@ -4,13 +4,7 @@ import {
 	useState,
 	type ComponentProps,
 } from "react"
-import Animated, {
-	useSharedValue,
-	useAnimatedStyle,
-	withTiming,
-} from "react-native-reanimated"
 import { Pressable, View, Text } from "@/tw"
-import { ScrollView } from "react-native"
 import { cn } from "./cn"
 
 interface TabsContextValue {

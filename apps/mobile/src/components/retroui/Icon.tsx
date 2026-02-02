@@ -62,6 +62,7 @@ const iconMap: Record<string, IoniconsName> = {
 	wifi: "wifi",
 	bluetooth: "bluetooth",
 	battery: "battery-full",
+	trophy: "trophy",
 	location: "location",
 	map: "map",
 	compass: "compass",

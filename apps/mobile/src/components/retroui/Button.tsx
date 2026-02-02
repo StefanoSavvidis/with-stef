@@ -3,6 +3,7 @@ import type { ComponentProps } from "react"
 import { ActivityIndicator, StyleSheet, type TextStyle } from "react-native"
 import { Pressable, Text } from "@/tw"
 import { cn } from "./cn"
+import { fontSansSemiBold } from "@/lib/fonts"
 
 export const buttonVariants = cva(
 	"flex-row items-center justify-center rounded border-2 border-black",
@@ -39,12 +40,16 @@ const textSizeStyles = StyleSheet.create({
 })
 
 const textVariantStyles: Record<string, TextStyle> = {
-	default: { color: "#000", fontWeight: "600" },
-	secondary: { color: "#fff", fontWeight: "600" },
-	outline: { color: "#000", fontWeight: "600" },
-	link: { color: "#000", fontWeight: "600", textDecorationLine: "underline" },
-	ghost: { color: "#000", fontWeight: "600" },
-	destructive: { color: "#fff", fontWeight: "600" },
+	default: { color: "#000", fontFamily: fontSansSemiBold },
+	secondary: { color: "#fff", fontFamily: fontSansSemiBold },
+	outline: { color: "#000", fontFamily: fontSansSemiBold },
+	link: {
+		color: "#000",
+		fontFamily: fontSansSemiBold,
+		textDecorationLine: "underline",
+	},
+	ghost: { color: "#000", fontFamily: fontSansSemiBold },
+	destructive: { color: "#fff", fontFamily: fontSansSemiBold },
 }
 
 export interface ButtonProps

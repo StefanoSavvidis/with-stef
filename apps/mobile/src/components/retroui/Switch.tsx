@@ -1,14 +1,11 @@
-import type { ComponentProps } from "react"
+import { useEffect, type ComponentProps } from "react"
 import Animated, {
 	useSharedValue,
 	useAnimatedStyle,
 	withTiming,
 } from "react-native-reanimated"
-import { Pressable, View } from "@/tw"
+import { Pressable } from "@/tw"
 import { cn } from "./cn"
-import { useEffect } from "react"
-
-const AnimatedView = Animated.createAnimatedComponent(View)
 
 export interface SwitchProps
 	extends Omit<ComponentProps<typeof Pressable>, "children"> {
@@ -45,12 +42,17 @@ export function Switch({
 			)}
 			{...props}
 		>
-			<AnimatedView
-				style={animatedStyle}
-				className={cn(
-					"h-4 w-4 border-2 border-border",
-					checked ? "bg-background" : "bg-primary",
-				)}
+			<Animated.View
+				style={[
+					animatedStyle,
+					{
+						height: 16,
+						width: 16,
+						borderWidth: 2,
+						borderColor: "#000",
+						backgroundColor: checked ? "#fff" : "#ffdb33",
+					},
+				]}
 			/>
 		</Pressable>
 	)
