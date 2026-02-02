@@ -16,6 +16,7 @@ const gameFields = {
 	name: v.string(),
 	status: v.union(v.literal("draft"), v.literal("live"), v.literal("ended")),
 	createdBy: v.string(),
+	deletionTime: v.optional(v.number()),
 }
 
 const gameValidator = v.object(gameFields)
@@ -73,6 +74,59 @@ export const updateGameStatus = adminMutation({
 		}
 
 		await ctx.db.patch(args.gameId, { status: args.status })
+	},
+})
+
+export const deleteGame = adminMutation({
+	args: {
+		gameId: v.id("triviaGames"),
+	},
+	handler: async (ctx, args) => {
+		const game = await ctx.db.get(args.gameId)
+		if (!game) {
+			throw new Error("Game not found")
+		}
+		if (game.createdBy !== ctx.user._id) {
+			throw new Error("Unauthorized: not your game")
+		}
+		if (game.deletionTime) {
+			throw new Error("Game already deleted")
+		}
+
+		const deletionTime = Date.now()
+
+		// Soft delete the game
+		await ctx.db.patch(args.gameId, { deletionTime })
+
+		// Cascade soft delete to questions
+		const questions = await ctx.db
+			.query("triviaQuestions")
+			.withIndex("by_game", (q) => q.eq("gameId", args.gameId))
+			.collect()
+
+		for (const question of questions) {
+			await ctx.db.patch(question._id, { deletionTime })
+
+			// Cascade soft delete to answers for this question
+			const answers = await ctx.db
+				.query("triviaAnswers")
+				.withIndex("by_question", (q) => q.eq("questionId", question._id))
+				.collect()
+
+			for (const answer of answers) {
+				await ctx.db.patch(answer._id, { deletionTime })
+			}
+		}
+
+		// Cascade soft delete to participants
+		const participants = await ctx.db
+			.query("triviaParticipants")
+			.withIndex("by_game", (q) => q.eq("gameId", args.gameId))
+			.collect()
+
+		for (const participant of participants) {
+			await ctx.db.patch(participant._id, { deletionTime })
+		}
 	},
 })
 
@@ -226,7 +280,7 @@ export const joinGame = authedMutation({
 	returns: v.id("triviaParticipants"),
 	handler: async (ctx, args) => {
 		const game = await ctx.db.get(args.gameId)
-		if (!game) {
+		if (!game || game.deletionTime !== undefined) {
 			throw new Error("Game not found")
 		}
 		if (game.status !== "live") {
@@ -323,10 +377,36 @@ export const listLiveGames = publicQuery({
 	args: {},
 	returns: v.array(gameValidator),
 	handler: async (ctx) => {
-		return ctx.db
+		const games = await ctx.db
 			.query("triviaGames")
 			.withIndex("by_status", (q) => q.eq("status", "live"))
 			.collect()
+		return games.filter((game) => game.deletionTime === undefined)
+	},
+})
+
+export const listEndedGames = authedQuery({
+	args: {},
+	returns: v.array(gameValidator),
+	handler: async (ctx) => {
+		// Get all games the user participated in
+		const participations = await ctx.db
+			.query("triviaParticipants")
+			.withIndex("by_user", (q) => q.eq("userId", ctx.user._id))
+			.collect()
+
+		const participatedGameIds = new Set(participations.map((p) => p.gameId))
+
+		// Get ended games and filter to only those the user participated in (excluding deleted)
+		const endedGames = await ctx.db
+			.query("triviaGames")
+			.withIndex("by_status", (q) => q.eq("status", "ended"))
+			.order("desc")
+			.collect()
+
+		return endedGames.filter(
+			(game) => participatedGameIds.has(game._id) && game.deletionTime === undefined,
+		)
 	},
 })
 

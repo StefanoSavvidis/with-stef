@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { api } from "@with-stef/backend/convex/_generated/api"
 import type { Id } from "@with-stef/backend/convex/_generated/dataModel"
 import { useMutation, useQuery } from "convex/react"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { AddQuestionModal } from "@/components/trivia/AddQuestionModal"
 import { Leaderboard } from "@/components/trivia/Leaderboard"
@@ -23,8 +23,10 @@ function GameManagementPage() {
 		gameId: gameId as Id<"triviaGames">,
 	})
 	const updateGameStatus = useMutation(api.trivia.updateGameStatus)
+	const deleteGame = useMutation(api.trivia.deleteGame)
 
 	const [isUpdatingStatus, setIsUpdatingStatus] = useState(false)
+	const [isDeleting, setIsDeleting] = useState(false)
 
 	if (game === undefined) {
 		return (
@@ -74,6 +76,19 @@ function GameManagementPage() {
 		}
 	}
 
+	const handleDeleteGame = async () => {
+		if (!confirm(`Are you sure you want to delete "${game.name}"?`)) {
+			return
+		}
+		setIsDeleting(true)
+		try {
+			await deleteGame({ gameId: gameId as Id<"triviaGames"> })
+			navigate({ to: "/trivia" })
+		} finally {
+			setIsDeleting(false)
+		}
+	}
+
 	const questions = (game.questions ?? []).filter(
 		(q): q is NonNullable<typeof q> => q !== null,
 	)
@@ -96,21 +111,33 @@ function GameManagementPage() {
 					</div>
 				</div>
 
-				{game.status === "draft" && (
-					<Button onClick={handleGoLive} disabled={isUpdatingStatus}>
-						{isUpdatingStatus ? "Going Live..." : "Go Live"}
-					</Button>
-				)}
-
-				{game.status === "live" && (
+				<div className="flex items-center gap-2">
 					<Button
-						variant="secondary"
-						onClick={handleEndGame}
-						disabled={isUpdatingStatus}
+						variant="ghost"
+						onClick={handleDeleteGame}
+						disabled={isDeleting}
+						className="text-red-600 hover:text-red-700 hover:bg-red-50"
 					>
-						{isUpdatingStatus ? "Ending..." : "End Game"}
+						<Trash2 className="w-4 h-4 mr-2" />
+						{isDeleting ? "Deleting..." : "Delete"}
 					</Button>
-				)}
+
+					{game.status === "draft" && (
+						<Button onClick={handleGoLive} disabled={isUpdatingStatus}>
+							{isUpdatingStatus ? "Going Live..." : "Go Live"}
+						</Button>
+					)}
+
+					{game.status === "live" && (
+						<Button
+							variant="secondary"
+							onClick={handleEndGame}
+							disabled={isUpdatingStatus}
+						>
+							{isUpdatingStatus ? "Ending..." : "End Game"}
+						</Button>
+					)}
+				</div>
 			</div>
 
 			{/* Main Content */}

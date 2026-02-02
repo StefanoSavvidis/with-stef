@@ -10,9 +10,11 @@ export default defineSchema({
 			v.literal("ended"),
 		),
 		createdBy: v.string(), // user ID from Better Auth component (string due to component boundary)
+		deletionTime: v.optional(v.number()), // soft delete timestamp
 	})
 		.index("by_status", ["status"])
-		.index("by_created_by", ["createdBy"]),
+		.index("by_created_by", ["createdBy"])
+		.index("by_deletion_time", ["deletionTime"]),
 
 	triviaQuestions: defineTable({
 		gameId: v.id("triviaGames"),
@@ -27,27 +29,33 @@ export default defineSchema({
 		isAnswerRevealed: v.boolean(),
 		baseScore: v.number(),
 		multiplier: v.number(),
+		deletionTime: v.optional(v.number()), // soft delete timestamp (cascades from game)
 	})
 		.index("by_game", ["gameId"])
-		.index("by_game_and_status", ["gameId", "status"]),
+		.index("by_game_and_status", ["gameId", "status"])
+		.index("by_deletion_time", ["deletionTime"]),
 
 	triviaParticipants: defineTable({
 		gameId: v.id("triviaGames"),
 		userId: v.string(), // user ID from Better Auth component (string due to component boundary)
 		name: v.string(), // denormalized from user for leaderboard display
 		score: v.number(),
+		deletionTime: v.optional(v.number()), // soft delete timestamp (cascades from game)
 	})
 		.index("by_game", ["gameId"])
 		.index("by_user", ["userId"])
 		.index("by_game_and_user", ["gameId", "userId"])
-		.index("by_game_and_score", ["gameId", "score"]),
+		.index("by_game_and_score", ["gameId", "score"])
+		.index("by_deletion_time", ["deletionTime"]),
 
 	triviaAnswers: defineTable({
 		questionId: v.id("triviaQuestions"),
 		participantId: v.id("triviaParticipants"),
 		selectedOption: v.number(),
+		deletionTime: v.optional(v.number()), // soft delete timestamp (cascades from game)
 	})
 		.index("by_question", ["questionId"])
 		.index("by_participant", ["participantId"])
-		.index("by_question_and_participant", ["questionId", "participantId"]),
+		.index("by_question_and_participant", ["questionId", "participantId"])
+		.index("by_deletion_time", ["deletionTime"]),
 })
