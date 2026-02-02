@@ -10,6 +10,29 @@ import {
 	publicQuery,
 } from "./functions"
 
+const gameFields = {
+	_id: v.id("triviaGames"),
+	_creationTime: v.number(),
+	name: v.string(),
+	status: v.union(v.literal("draft"), v.literal("live"), v.literal("ended")),
+	createdBy: v.string(),
+}
+
+const gameValidator = v.object(gameFields)
+
+const questionValidator = v.object({
+	_id: v.id("triviaQuestions"),
+	_creationTime: v.number(),
+	gameId: v.id("triviaGames"),
+	text: v.string(),
+	options: v.array(v.string()),
+	status: v.union(v.literal("draft"), v.literal("live"), v.literal("closed")),
+	correctOption: v.optional(v.number()),
+	isAnswerRevealed: v.boolean(),
+	baseScore: v.number(),
+	multiplier: v.number(),
+})
+
 // ============================================================================
 // Admin Mutations
 // ============================================================================
@@ -200,6 +223,7 @@ export const joinGame = authedMutation({
 	args: {
 		gameId: v.id("triviaGames"),
 	},
+	returns: v.id("triviaParticipants"),
 	handler: async (ctx, args) => {
 		const game = await ctx.db.get(args.gameId)
 		if (!game) {
@@ -235,6 +259,7 @@ export const submitAnswer = authedMutation({
 		questionId: v.id("triviaQuestions"),
 		selectedOption: v.number(),
 	},
+	returns: v.id("triviaAnswers"),
 	handler: async (ctx, args) => {
 		if (args.selectedOption < 0 || args.selectedOption > 3) {
 			throw new Error("selectedOption must be 0-3")
@@ -296,6 +321,7 @@ export const submitAnswer = authedMutation({
 
 export const listLiveGames = publicQuery({
 	args: {},
+	returns: v.array(gameValidator),
 	handler: async (ctx) => {
 		return ctx.db
 			.query("triviaGames")
@@ -308,10 +334,17 @@ export const getGame = query({
 	args: {
 		gameId: v.id("triviaGames"),
 	},
+	returns: v.union(
+		v.null(),
+		v.object({
+			...gameFields,
+			questions: v.array(questionValidator),
+		}),
+	),
 	handler: async (ctx, args) => {
-		const user = await authComponent.getAuthUser(ctx)
+		const user = await authComponent.getAuthUser(ctx);
 
-		const game = await ctx.db.get(args.gameId)
+		const game = await ctx.db.get(args.gameId);
 		if (!game) {
 			return null
 		}
@@ -325,14 +358,12 @@ export const getGame = query({
 
 		// Filter question data based on role
 		const filteredQuestions = questions
+			// Users don't see draft questions (admins see everything)
+			.filter((q) => isAdmin || q.status !== "draft")
 			.map((q) => {
 				// Admins see everything
 				if (isAdmin) {
 					return q
-				}
-				// Users don't see draft questions
-				if (q.status === "draft") {
-					return null
 				}
 				// Users don't see correctOption until revealed
 				return {
@@ -340,7 +371,6 @@ export const getGame = query({
 					correctOption: q.isAnswerRevealed ? q.correctOption : undefined,
 				}
 			})
-			.filter(Boolean)
 
 		return {
 			...game,
@@ -400,6 +430,16 @@ export const getMyStats = authedQuery({
 	args: {
 		gameId: v.id("triviaGames"),
 	},
+	returns: v.union(
+		v.null(),
+		v.object({
+			totalAnswered: v.number(),
+			totalCorrect: v.number(),
+			score: v.number(),
+			rank: v.number(),
+			totalParticipants: v.number(),
+		}),
+	),
 	handler: async (ctx, args) => {
 		// Get participant record
 		const participant = await ctx.db
