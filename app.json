@@ -1,5 +1,10 @@
 {
   "ios": {
     "bundleIdentifier": "com.savvido.with-stef"
+  },
+  "extra": {
+    "eas": {
+      "projectId": "875a0327-92bb-4970-b750-9cab098a2a33"
+    }
   }
 }
