@@ -1,12 +1,13 @@
 import { useState } from "react"
+import { View } from "@/tw"
 import {
-	View,
 	Text,
-	TextInput,
-	TouchableOpacity,
-	StyleSheet,
-	ActivityIndicator,
-} from "react-native"
+	Input,
+	Label,
+	Button,
+	Card,
+	Alert,
+} from "@/components/retroui"
 import { authClient } from "../lib/auth-client"
 
 interface LoginScreenProps {
@@ -59,109 +60,71 @@ export default function LoginScreen({ onAuthSuccess }: LoginScreenProps) {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>{isSignUp ? "Sign Up" : "Sign In"}</Text>
-			<Text style={styles.subtitle}>Welcome to With Stef</Text>
-
-			<TextInput
-				style={styles.input}
-				placeholder="Email"
-				value={email}
-				onChangeText={setEmail}
-				keyboardType="email-address"
-				autoCapitalize="none"
-				autoComplete="email"
-			/>
-
-			<TextInput
-				style={styles.input}
-				placeholder="Password"
-				value={password}
-				onChangeText={setPassword}
-				secureTextEntry
-				autoComplete="password"
-			/>
-
-			{error && <Text style={styles.error}>{error}</Text>}
-
-			<TouchableOpacity
-				style={styles.button}
-				onPress={handleSubmit}
-				disabled={loading}
-			>
-				{loading ? (
-					<ActivityIndicator color="#fff" />
-				) : (
-					<Text style={styles.buttonText}>
-						{isSignUp ? "Sign Up" : "Sign In"}
-					</Text>
-				)}
-			</TouchableOpacity>
-
-			<TouchableOpacity
-				style={styles.switchButton}
-				onPress={() => setIsSignUp(!isSignUp)}
-			>
-				<Text style={styles.switchText}>
-					{isSignUp
-						? "Already have an account? Sign In"
-						: "Need an account? Sign Up"}
+		<View className="flex-1 justify-center bg-white p-5">
+			<View className="mb-8">
+				<Text variant="h1" className="mb-2 text-center">
+					{isSignUp ? "Sign Up" : "Sign In"}
 				</Text>
-			</TouchableOpacity>
+				<Text variant="muted" className="text-center">
+					Welcome to With Stef
+				</Text>
+			</View>
+
+			<Card className="mb-6 w-full">
+				<Card.Content className="gap-4">
+					<View>
+						<Label>Email</Label>
+						<Input
+							placeholder="Enter your email"
+							value={email}
+							onChangeText={setEmail}
+							keyboardType="email-address"
+							autoCapitalize="none"
+							autoComplete="email"
+						/>
+					</View>
+
+					<View>
+						<Label>Password</Label>
+						<Input
+							placeholder="Enter your password"
+							value={password}
+							onChangeText={setPassword}
+							secureTextEntry
+							autoComplete="password"
+						/>
+					</View>
+
+					{error && (
+						<Alert status="error">
+							<View className="flex-row items-center gap-2">
+								<Alert.Icon status="error" />
+								<Alert.Title status="error">{error}</Alert.Title>
+							</View>
+						</Alert>
+					)}
+
+					<Button
+						variant="default"
+						size="lg"
+						onPress={handleSubmit}
+						loading={loading}
+						className="mt-2 w-full"
+					>
+						{isSignUp ? "Sign Up" : "Sign In"}
+					</Button>
+				</Card.Content>
+			</Card>
+
+			<Button
+				variant="link"
+				onPress={() => setIsSignUp(!isSignUp)}
+				className="self-center"
+			>
+				{isSignUp
+					? "Already have an account? Sign In"
+					: "Need an account? Sign Up"}
+			</Button>
 		</View>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-		justifyContent: "center",
-		backgroundColor: "#fff",
-	},
-	title: {
-		fontSize: 28,
-		fontWeight: "bold",
-		textAlign: "center",
-		marginBottom: 8,
-	},
-	subtitle: {
-		fontSize: 16,
-		color: "#666",
-		textAlign: "center",
-		marginBottom: 32,
-	},
-	input: {
-		borderWidth: 1,
-		borderColor: "#ddd",
-		borderRadius: 8,
-		padding: 16,
-		marginBottom: 16,
-		fontSize: 16,
-	},
-	error: {
-		color: "red",
-		marginBottom: 16,
-		textAlign: "center",
-	},
-	button: {
-		backgroundColor: "#007AFF",
-		padding: 16,
-		borderRadius: 8,
-		alignItems: "center",
-		marginBottom: 16,
-	},
-	buttonText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
-	},
-	switchButton: {
-		padding: 16,
-		alignItems: "center",
-	},
-	switchText: {
-		color: "#007AFF",
-		fontSize: 14,
-	},
-})

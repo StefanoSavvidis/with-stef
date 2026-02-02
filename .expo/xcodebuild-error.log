@@ -1,0 +1,6 @@
+2026-02-02 03:13:40.472 xcodebuild[41468:465245] Writing error result bundle to /var/folders/9w/gj7y60kx7n15rr4nyx83dc9m0000gn/T/ResultBundle_2026-02-02_03-13-0040.xcresult
+xcodebuild: error: Unable to find a destination matching the provided destination specifier:
+		{ id:195910E9-2AD2-43D4-9F13-1E49A8EDD644 }
+
+	Ineligible destinations for the "withstef" scheme:
+		{ platform:iOS, id:dvtdevice-DVTiPhonePlaceholder-iphoneos:placeholder, name:Any iOS Device, error:iOS 26.2 is not installed. Please download and install the platform from Xcode > Settings > Components. }

@@ -1,6 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
 import { useQuery } from "convex/react"
 import { api } from "@with-stef/backend/convex/_generated/api"
+import { View, ScrollView } from "@/tw"
+import { Text, Button, Card, Badge, Avatar } from "@/components/retroui"
 import { authClient } from "../lib/auth-client"
 
 export default function HomeScreen() {
@@ -11,66 +12,61 @@ export default function HomeScreen() {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.title}>Welcome!</Text>
+		<ScrollView className="flex-1 bg-white" contentContainerClassName="p-5">
+			<View className="mb-6 mt-12 flex-row items-center gap-4">
+				<Avatar
+					size="lg"
+					alt={user?.name ?? user?.email}
+					fallback={user?.name?.[0] ?? user?.email?.[0]}
+				/>
+				<View className="flex-1">
+					<Text variant="h2">Welcome!</Text>
+					<Text variant="muted">{user?.email}</Text>
+				</View>
+			</View>
 
 			{user && (
-				<View style={styles.userInfo}>
-					<Text style={styles.label}>Name</Text>
-					<Text style={styles.value}>{user.name ?? "Not set"}</Text>
+				<Card className="mb-6 w-full">
+					<Card.Header>
+						<Card.Title>Profile</Card.Title>
+						<Card.Description>Your account information</Card.Description>
+					</Card.Header>
+					<Card.Content className="gap-4">
+						<View className="flex-row items-center justify-between">
+							<Text variant="label">Name</Text>
+							<Text>{user.name ?? "Not set"}</Text>
+						</View>
 
-					<Text style={styles.label}>Email</Text>
-					<Text style={styles.value}>{user.email}</Text>
+						<View className="h-px bg-black" />
 
-					<Text style={styles.label}>Role</Text>
-					<Text style={styles.value}>{user.role ?? "user"}</Text>
-				</View>
+						<View className="flex-row items-center justify-between">
+							<Text variant="label">Email</Text>
+							<Text>{user.email}</Text>
+						</View>
+
+						<View className="h-px bg-black" />
+
+						<View className="flex-row items-center justify-between">
+							<Text variant="label">Role</Text>
+							<Badge
+								variant={user.role === "admin" ? "surface" : "default"}
+								size="sm"
+							>
+								{user.role ?? "user"}
+							</Badge>
+						</View>
+					</Card.Content>
+				</Card>
 			)}
 
-			<TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-				<Text style={styles.signOutText}>Sign Out</Text>
-			</TouchableOpacity>
-		</View>
+			<Button
+				variant="destructive"
+				size="lg"
+				onPress={handleSignOut}
+				className="w-full"
+			>
+				Sign Out
+			</Button>
+		</ScrollView>
 	)
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-		backgroundColor: "#fff",
-	},
-	title: {
-		fontSize: 28,
-		fontWeight: "bold",
-		marginBottom: 24,
-		marginTop: 60,
-	},
-	userInfo: {
-		backgroundColor: "#f5f5f5",
-		padding: 16,
-		borderRadius: 8,
-		marginBottom: 24,
-	},
-	label: {
-		fontSize: 12,
-		color: "#666",
-		marginBottom: 4,
-		textTransform: "uppercase",
-	},
-	value: {
-		fontSize: 16,
-		marginBottom: 16,
-	},
-	signOutButton: {
-		backgroundColor: "#ff3b30",
-		padding: 16,
-		borderRadius: 8,
-		alignItems: "center",
-	},
-	signOutText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
-	},
-})

@@ -1,49 +1,56 @@
+import "./src/global.css"
 import { StatusBar } from "expo-status-bar"
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native"
+import { ActivityIndicator } from "react-native"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import {
+	SafeAreaProvider,
+	useSafeAreaInsets,
+} from "react-native-safe-area-context"
+import { Uniwind } from "uniwind"
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react"
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react"
 import { convex } from "./src/lib/convex"
 import { authClient } from "./src/lib/auth-client"
+import { View } from "./src/tw"
+import { Text } from "@/components/retroui"
 import LoginScreen from "./src/screens/LoginScreen"
 import HomeScreen from "./src/screens/HomeScreen"
 
-export default function App() {
-	return (
-		<ConvexBetterAuthProvider client={convex} authClient={authClient}>
-			<View style={styles.container}>
-				<StatusBar style="auto" />
-
-				<AuthLoading>
-					<View style={styles.loading}>
-						<ActivityIndicator size="large" />
-						<Text style={styles.loadingText}>Loading...</Text>
-					</View>
-				</AuthLoading>
-
-				<Unauthenticated>
-					<LoginScreen />
-				</Unauthenticated>
-
-				<Authenticated>
-					<HomeScreen />
-				</Authenticated>
-			</View>
-		</ConvexBetterAuthProvider>
-	)
+function SafeAreaListener({ children }: { children: React.ReactNode }) {
+	const insets = useSafeAreaInsets()
+	Uniwind.updateInsets(insets)
+	return <>{children}</>
 }
 
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-	},
-	loading: {
-		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	loadingText: {
-		marginTop: 16,
-		color: "#666",
-	},
-})
+export default function App() {
+	return (
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<SafeAreaProvider>
+				<SafeAreaListener>
+					<ConvexBetterAuthProvider client={convex} authClient={authClient}>
+						<View className="flex-1 bg-white">
+							<StatusBar style="auto" />
+
+							<AuthLoading>
+								<View className="flex-1 items-center justify-center">
+									<ActivityIndicator size="large" color="#ffdb33" />
+									<Text variant="muted" className="mt-4">
+										Loading...
+									</Text>
+								</View>
+							</AuthLoading>
+
+							<Unauthenticated>
+								<LoginScreen />
+							</Unauthenticated>
+
+							<Authenticated>
+								<HomeScreen />
+							</Authenticated>
+						</View>
+					</ConvexBetterAuthProvider>
+				</SafeAreaListener>
+			</SafeAreaProvider>
+		</GestureHandlerRootView>
+	)
+}

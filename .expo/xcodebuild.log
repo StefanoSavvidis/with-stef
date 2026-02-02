@@ -1,0 +1,3 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace /Users/stefanosavvidis/dev/with-stef/ios/withstef.xcworkspace -configuration Debug -scheme withstef -destination id=195910E9-2AD2-43D4-9F13-1E49A8EDD644
+
