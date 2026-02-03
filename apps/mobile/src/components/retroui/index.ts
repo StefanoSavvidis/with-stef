@@ -1,5 +1,7 @@
 // Utilities
 export { cn } from "./cn"
+export { HardShadow } from "./HardShadow"
+export type { HardShadowProps } from "./HardShadow"
 
 // Icons
 export { Icon } from "./Icon"

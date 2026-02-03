@@ -8,13 +8,13 @@ import {
 	type ComponentProps,
 } from "react"
 import BottomSheet, {
-	BottomSheetView,
 	BottomSheetBackdrop,
 	BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
 import { Pressable, View, Text } from "@/tw"
 import { cn } from "./cn"
-import { Icon, type IconProps } from "./Icon"
+import { Icon } from "./Icon"
+import { HardShadow } from "./HardShadow"
 
 interface MenuContextValue {
 	open: boolean
@@ -99,18 +99,16 @@ function MenuContent({ children }: MenuContentProps) {
 			enableDynamicSizing
 			onChange={handleSheetChanges}
 			backdropComponent={renderBackdrop}
-			backgroundStyle={{
-				backgroundColor: "#fff",
-				borderWidth: 2,
-				borderColor: "#000",
-				borderTopLeftRadius: 0,
-				borderTopRightRadius: 0,
-			}}
+			backgroundStyle={{ backgroundColor: "transparent" }}
 			handleIndicatorStyle={{ backgroundColor: "#000" }}
 		>
-			<BottomSheetScrollView style={{ maxHeight: 400 }}>
-				<View className="py-2">{children}</View>
-			</BottomSheetScrollView>
+			<HardShadow offset={6} radius={0} style={{ alignSelf: "stretch" }}>
+				<View className="border-2 border-black bg-white">
+					<BottomSheetScrollView style={{ maxHeight: 400 }}>
+						<View className="py-2">{children}</View>
+					</BottomSheetScrollView>
+				</View>
+			</HardShadow>
 		</BottomSheet>
 	)
 }

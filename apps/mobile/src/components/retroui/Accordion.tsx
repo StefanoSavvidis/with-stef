@@ -9,6 +9,7 @@ import { Pressable, View, Text as TWText } from "@/tw"
 import { cn } from "./cn"
 import { Text } from "./Text"
 import { Icon } from "./Icon"
+import { HardShadow } from "./HardShadow"
 
 interface AccordionContextValue {
 	expandedItems: string[]
@@ -53,12 +54,15 @@ function AccordionRoot({
 
 	return (
 		<AccordionContext.Provider value={{ expandedItems, toggleItem, type }}>
-			<View
+			<HardShadow
+				offset={4}
+				radius={4}
+				containerClassName={className}
 				className={cn("rounded border-2 border-border", className)}
 				{...props}
 			>
 				{children}
-			</View>
+			</HardShadow>
 		</AccordionContext.Provider>
 	)
 }

@@ -2,17 +2,23 @@ import type { ComponentProps } from "react"
 import { ScrollView } from "react-native"
 import { View, Text } from "@/tw"
 import { cn } from "./cn"
+import { HardShadow } from "./HardShadow"
 
 export interface TableProps extends ComponentProps<typeof View> {}
 
 function TableRoot({ className, children, ...props }: TableProps) {
 	return (
-		<View
-			className={cn("rounded border-2 border-border overflow-hidden", className)}
-			{...props}
-		>
-			{children}
-		</View>
+		<HardShadow offset={6} radius={4} containerClassName={className}>
+			<View
+				className={cn(
+					"rounded border-2 border-border overflow-hidden",
+					className,
+				)}
+				{...props}
+			>
+				{children}
+			</View>
+		</HardShadow>
 	)
 }
 

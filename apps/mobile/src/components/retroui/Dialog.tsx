@@ -6,6 +6,7 @@ import BottomSheet, {
 import { View, Text as TWText } from "@/tw"
 import { cn } from "./cn"
 import { Text } from "./Text"
+import { HardShadow } from "./HardShadow"
 
 export interface DialogProps {
 	open?: boolean
@@ -55,16 +56,14 @@ function DialogRoot({ open, onOpenChange, children }: DialogProps) {
 			enableDynamicSizing
 			onChange={handleSheetChanges}
 			backdropComponent={renderBackdrop}
-			backgroundStyle={{
-				backgroundColor: "#fff",
-				borderWidth: 2,
-				borderColor: "#000",
-				borderTopLeftRadius: 0,
-				borderTopRightRadius: 0,
-			}}
+			backgroundStyle={{ backgroundColor: "transparent" }}
 			handleIndicatorStyle={{ backgroundColor: "#000" }}
 		>
-			<BottomSheetView>{children}</BottomSheetView>
+			<HardShadow offset={6} radius={0} style={{ alignSelf: "stretch" }}>
+				<View className="border-2 border-black bg-white">
+					<BottomSheetView>{children}</BottomSheetView>
+				</View>
+			</HardShadow>
 		</BottomSheet>
 	)
 }

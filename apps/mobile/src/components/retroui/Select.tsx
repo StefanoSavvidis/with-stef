@@ -8,13 +8,13 @@ import {
 	type ComponentProps,
 } from "react"
 import BottomSheet, {
-	BottomSheetView,
 	BottomSheetBackdrop,
 	BottomSheetScrollView,
 } from "@gorhom/bottom-sheet"
 import { Pressable, View, Text } from "@/tw"
 import { cn } from "./cn"
 import { Icon } from "./Icon"
+import { HardShadow } from "./HardShadow"
 
 interface SelectContextValue {
 	value?: string
@@ -58,17 +58,19 @@ function SelectTrigger({ className, children, ...props }: SelectTriggerProps) {
 	const { setOpen } = useContext(SelectContext)
 
 	return (
-		<Pressable
-			onPress={() => setOpen(true)}
-			className={cn(
-				"flex-row items-center justify-between rounded border-2 border-border bg-background px-4 py-3",
-				className,
-			)}
-			{...props}
-		>
-			{children}
-			<Icon name="chevron-down" size={20} color="#000" />
-		</Pressable>
+		<HardShadow offset={4} radius={4}>
+			<Pressable
+				onPress={() => setOpen(true)}
+				className={cn(
+					"flex-row items-center justify-between rounded border-2 border-border bg-background px-4 py-3",
+					className,
+				)}
+				{...props}
+			>
+				{children}
+				<Icon name="chevron-down" size={20} color="#000" />
+			</Pressable>
+		</HardShadow>
 	)
 }
 
@@ -140,18 +142,16 @@ function SelectContent({ children }: SelectContentProps) {
 			enableDynamicSizing
 			onChange={handleSheetChanges}
 			backdropComponent={renderBackdrop}
-			backgroundStyle={{
-				backgroundColor: "#fff",
-				borderWidth: 2,
-				borderColor: "#000",
-				borderTopLeftRadius: 0,
-				borderTopRightRadius: 0,
-			}}
+			backgroundStyle={{ backgroundColor: "transparent" }}
 			handleIndicatorStyle={{ backgroundColor: "#000" }}
 		>
-			<BottomSheetScrollView style={{ maxHeight: 400 }}>
-				<View className="py-2">{children}</View>
-			</BottomSheetScrollView>
+			<HardShadow offset={6} radius={0} style={{ alignSelf: "stretch" }}>
+				<View className="border-2 border-black bg-white">
+					<BottomSheetScrollView style={{ maxHeight: 400 }}>
+						<View className="py-2">{children}</View>
+					</BottomSheetScrollView>
+				</View>
+			</HardShadow>
 		</BottomSheet>
 	)
 }

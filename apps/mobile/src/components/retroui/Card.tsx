@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { View, Text as TWText } from "@/tw"
 import { cn } from "./cn"
 import { Text } from "./Text"
+import { HardShadow } from "./HardShadow"
 
 const styles = StyleSheet.create({
 	description: { fontSize: 14, color: "#6b7280" },
@@ -10,12 +11,17 @@ const styles = StyleSheet.create({
 
 export interface CardProps extends ComponentProps<typeof View> {}
 
-function CardRoot({ className, ...props }: CardProps) {
+function CardRoot({ className, children, ...props }: CardProps) {
 	return (
-		<View
+		<HardShadow
+			offset={4}
+			radius={4}
+			containerClassName={className}
 			className={cn("rounded border-2 border-black bg-white", className)}
 			{...props}
-		/>
+		>
+			{children}
+		</HardShadow>
 	)
 }
 

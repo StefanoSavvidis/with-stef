@@ -1,5 +1,6 @@
 import type { ComponentProps } from "react"
 import { StyleSheet, TextInput as RNTextInput } from "react-native"
+import { HardShadow } from "./HardShadow"
 
 const styles = StyleSheet.create({
 	input: {
@@ -31,11 +32,13 @@ export function Input({
 	...props
 }: InputProps) {
 	return (
-		<RNTextInput
-			placeholder={placeholder}
-			placeholderTextColor="#737373"
-			style={[styles.input, error && styles.error, style]}
-			{...props}
-		/>
+		<HardShadow offset={error ? 1 : 4} color={error ? "#ef4444" : "#000"} radius={4}>
+			<RNTextInput
+				placeholder={placeholder}
+				placeholderTextColor="#737373"
+				style={[styles.input, error && styles.error, style]}
+				{...props}
+			/>
+		</HardShadow>
 	)
 }
