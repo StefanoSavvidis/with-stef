@@ -86,11 +86,6 @@ export default function GameScreen() {
 	const liveQuestion =
 		game?.questions?.find((question) => question?.status === "live") ?? null
 
-	const totalWrong =
-		stats && stats.totalAnswered
-			? stats.totalAnswered - stats.totalCorrect
-			: 0
-
 	const statsTopRow = [
 		{
 			key: "rank",
@@ -126,7 +121,7 @@ export default function GameScreen() {
 		{
 			key: "wrong",
 			label: "Wrong",
-			value: totalWrong,
+			value: stats?.totalWrong ?? 0,
 			icon: "x",
 			background: "#fca5a5",
 		},

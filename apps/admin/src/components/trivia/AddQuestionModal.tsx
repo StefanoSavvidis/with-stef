@@ -1,6 +1,7 @@
 import { api } from "@with-stef/backend/convex/_generated/api"
 import type { Id } from "@with-stef/backend/convex/_generated/dataModel"
 import { useMutation } from "convex/react"
+import { Trash2 } from "lucide-react"
 import { useState } from "react"
 import { Button, Input, Text } from "@/components/retroui"
 import { Modal } from "@/components/ui/Modal"
@@ -17,7 +18,7 @@ export function AddQuestionModal({
 	gameId,
 }: AddQuestionModalProps) {
 	const [text, setText] = useState("")
-	const [options, setOptions] = useState(["", "", "", ""])
+	const [options, setOptions] = useState(["", ""])
 	const [baseScore, setBaseScore] = useState(10)
 	const [multiplier, setMultiplier] = useState(1)
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -27,6 +28,15 @@ export function AddQuestionModal({
 		const newOptions = [...options]
 		newOptions[index] = value
 		setOptions(newOptions)
+	}
+
+	const addOption = () => {
+		setOptions([...options, ""])
+	}
+
+	const removeOption = (index: number) => {
+		if (options.length <= 2) return
+		setOptions(options.filter((_, i) => i !== index))
 	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -50,13 +60,13 @@ export function AddQuestionModal({
 
 	const handleClose = () => {
 		setText("")
-		setOptions(["", "", "", ""])
+		setOptions(["", ""])
 		setBaseScore(10)
 		setMultiplier(1)
 		onClose()
 	}
 
-	const isValid = text.trim() && options.every((o) => o.trim())
+	const isValid = text.trim() && options.length >= 2 && options.every((o) => o.trim())
 
 	return (
 		<Modal isOpen={isOpen} onClose={handleClose} title="Add Question">
@@ -90,8 +100,27 @@ export function AddQuestionModal({
 								placeholder={`Option ${String.fromCharCode(65 + index)}`}
 								className="flex-1"
 							/>
+							<Button
+								type="button"
+								variant="outline"
+								size="icon"
+								className="h-[42px] w-[42px] justify-center group"
+								onClick={() => removeOption(index)}
+								disabled={options.length <= 2}
+							>
+								<Trash2 className="w-5 h-5 group-hover:text-red-500 transition-colors" />
+							</Button>
 						</div>
 					))}
+					<Button
+						type="button"
+						variant="outline"
+						size="sm"
+						onClick={addOption}
+						className="mt-2"
+					>
+						+ Add Option
+					</Button>
 				</div>
 
 				<div className="grid grid-cols-2 gap-4">

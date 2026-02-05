@@ -150,8 +150,8 @@ export const createQuestion = adminMutation({
 			throw new Error("Cannot add questions to ended game")
 		}
 
-		if (args.options.length !== 4) {
-			throw new Error("Question must have exactly 4 options")
+		if (args.options.length < 2) {
+			throw new Error("Question must have at least 2 options")
 		}
 
 		return ctx.db.insert("triviaQuestions", {
@@ -219,13 +219,12 @@ export const setCorrectAnswer = adminMutation({
 		correctOption: v.number(),
 	},
 	handler: async (ctx, args) => {
-		if (args.correctOption < 0 || args.correctOption > 3) {
-			throw new Error("correctOption must be 0-3")
-		}
-
 		const question = await ctx.db.get(args.questionId)
 		if (!question) {
 			throw new Error("Question not found")
+		}
+		if (args.correctOption < 0 || args.correctOption >= question.options.length) {
+			throw new Error(`correctOption must be 0-${question.options.length - 1}`)
 		}
 
 		const game = await ctx.db.get(question.gameId)
@@ -315,13 +314,12 @@ export const submitAnswer = authedMutation({
 	},
 	returns: v.id("triviaAnswers"),
 	handler: async (ctx, args) => {
-		if (args.selectedOption < 0 || args.selectedOption > 3) {
-			throw new Error("selectedOption must be 0-3")
-		}
-
 		const question = await ctx.db.get(args.questionId)
 		if (!question) {
 			throw new Error("Question not found")
+		}
+		if (args.selectedOption < 0 || args.selectedOption >= question.options.length) {
+			throw new Error(`selectedOption must be 0-${question.options.length - 1}`)
 		}
 		if (question.status !== "live") {
 			throw new Error("Can only answer live questions")
@@ -515,6 +513,7 @@ export const getMyStats = authedQuery({
 		v.object({
 			totalAnswered: v.number(),
 			totalCorrect: v.number(),
+			totalWrong: v.number(),
 			score: v.number(),
 			rank: v.number(),
 			totalParticipants: v.number(),
@@ -543,13 +542,15 @@ export const getMyStats = authedQuery({
 
 		// Get questions to check correctness
 		let totalCorrect = 0
+		let totalWrong = 0
 		for (const answer of answers) {
 			const question = await ctx.db.get(answer.questionId)
-			if (
-				question?.isAnswerRevealed &&
-				answer.selectedOption === question.correctOption
-			) {
-				totalCorrect++
+			if (question?.isAnswerRevealed) {
+				if (answer.selectedOption === question.correctOption) {
+					totalCorrect++
+				} else {
+					totalWrong++
+				}
 			}
 		}
 
@@ -566,6 +567,7 @@ export const getMyStats = authedQuery({
 		return {
 			totalAnswered: answers.length,
 			totalCorrect,
+			totalWrong,
 			score: participant.score,
 			rank,
 			totalParticipants: allParticipants.length,
