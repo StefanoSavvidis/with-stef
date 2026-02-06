@@ -64,18 +64,21 @@ Uses `@convex-dev/better-auth` Convex Component:
 ```typescript
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react"
 
-// Wrap content with auth state components
 <AuthLoading><Loading /></AuthLoading>
 <Unauthenticated><RedirectToLogin /></Unauthenticated>
 <Authenticated><ProtectedContent /></Authenticated>
 ```
 
-**Convex Function Protection**:
+**Convex Function Protection** - Use custom wrappers from `functions.ts`:
 ```typescript
-import { authComponent } from "./auth"
+// No auth needed
+import { publicQuery, publicMutation } from "./functions"
 
-const user = await authComponent.getAuthUser(ctx)
-if (!user || user.role !== "admin") throw new Error("Unauthorized")
+// Requires logged-in user (ctx.user available)
+import { authedQuery, authedMutation } from "./functions"
+
+// Requires admin role (ctx.user available, role checked)
+import { adminQuery, adminMutation } from "./functions"
 ```
 
 ## Code Style
@@ -84,10 +87,12 @@ if (!user || user.role !== "admin") throw new Error("Unauthorized")
 - **Imports**: Auto-organized by Biome
 - Generated files excluded from linting: `routeTree.gen.ts`, `convex/_generated/`
 
-## Convex Schema Guidelines
+## Convex Conventions
 
 - System fields `_id` and `_creationTime` are auto-generated (don't add indices for these)
 - Use `v` validator builder for schema definitions
+- Soft delete pattern: add `deletionTime: v.optional(v.number())` field, filter deleted records in queries
+- User IDs from Better Auth are strings (not Convex IDs) due to component boundary
 - Reference: https://docs.convex.dev/database/types
 
 ## Environment Variables
