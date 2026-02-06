@@ -1,5 +1,5 @@
 import { Link, useMatchRoute } from "@tanstack/react-router"
-import { ArrowLeft, Trophy } from "lucide-react"
+import { ArrowLeft, Palette, Trophy } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const navItems = [
@@ -7,6 +7,11 @@ const navItems = [
 		label: "Trivia",
 		href: "/admin/trivia",
 		icon: Trophy,
+	},
+	{
+		label: "Playground",
+		href: "/admin/playground",
+		icon: Palette,
 	},
 ]
 

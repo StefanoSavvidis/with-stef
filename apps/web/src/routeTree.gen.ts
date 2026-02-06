@@ -16,6 +16,7 @@ import { Route as DashboardAppRouteImport } from './routes/_dashboard/_app'
 import { Route as DashboardAdminIndexRouteImport } from './routes/_dashboard/admin/index'
 import { Route as DashboardAppIndexRouteImport } from './routes/_dashboard/_app/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as DashboardAdminPlaygroundRouteImport } from './routes/_dashboard/admin/playground'
 import { Route as DashboardAdminTriviaIndexRouteImport } from './routes/_dashboard/admin/trivia/index'
 import { Route as DashboardAppGamesGameIdRouteImport } from './routes/_dashboard/_app/games/$gameId'
 import { Route as DashboardAdminTriviaGamesGameIdRouteImport } from './routes/_dashboard/admin/trivia/games/$gameId'
@@ -53,6 +54,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardAdminPlaygroundRoute =
+  DashboardAdminPlaygroundRouteImport.update({
+    id: '/playground',
+    path: '/playground',
+    getParentRoute: () => DashboardAdminRoute,
+  } as any)
 const DashboardAdminTriviaIndexRoute =
   DashboardAdminTriviaIndexRouteImport.update({
     id: '/trivia/',
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/': typeof DashboardAppIndexRoute
   '/login': typeof LoginRoute
   '/admin': typeof DashboardAdminRouteWithChildren
+  '/admin/playground': typeof DashboardAdminPlaygroundRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin/': typeof DashboardAdminIndexRoute
   '/games/$gameId': typeof DashboardAppGamesGameIdRoute
@@ -84,6 +92,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof DashboardAppIndexRoute
   '/login': typeof LoginRoute
+  '/admin/playground': typeof DashboardAdminPlaygroundRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/admin': typeof DashboardAdminIndexRoute
   '/games/$gameId': typeof DashboardAppGamesGameIdRoute
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_dashboard/_app': typeof DashboardAppRouteWithChildren
   '/_dashboard/admin': typeof DashboardAdminRouteWithChildren
+  '/_dashboard/admin/playground': typeof DashboardAdminPlaygroundRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_dashboard/_app/': typeof DashboardAppIndexRoute
   '/_dashboard/admin/': typeof DashboardAdminIndexRoute
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/admin'
+    | '/admin/playground'
     | '/api/auth/$'
     | '/admin/'
     | '/games/$gameId'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/admin/playground'
     | '/api/auth/$'
     | '/admin'
     | '/games/$gameId'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_dashboard/_app'
     | '/_dashboard/admin'
+    | '/_dashboard/admin/playground'
     | '/api/auth/$'
     | '/_dashboard/_app/'
     | '/_dashboard/admin/'
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_dashboard/admin/playground': {
+      id: '/_dashboard/admin/playground'
+      path: '/playground'
+      fullPath: '/admin/playground'
+      preLoaderRoute: typeof DashboardAdminPlaygroundRouteImport
+      parentRoute: typeof DashboardAdminRoute
+    }
     '/_dashboard/admin/trivia/': {
       id: '/_dashboard/admin/trivia/'
       path: '/trivia'
@@ -233,12 +253,14 @@ const DashboardAppRouteWithChildren = DashboardAppRoute._addFileChildren(
 )
 
 interface DashboardAdminRouteChildren {
+  DashboardAdminPlaygroundRoute: typeof DashboardAdminPlaygroundRoute
   DashboardAdminIndexRoute: typeof DashboardAdminIndexRoute
   DashboardAdminTriviaIndexRoute: typeof DashboardAdminTriviaIndexRoute
   DashboardAdminTriviaGamesGameIdRoute: typeof DashboardAdminTriviaGamesGameIdRoute
 }
 
 const DashboardAdminRouteChildren: DashboardAdminRouteChildren = {
+  DashboardAdminPlaygroundRoute: DashboardAdminPlaygroundRoute,
   DashboardAdminIndexRoute: DashboardAdminIndexRoute,
   DashboardAdminTriviaIndexRoute: DashboardAdminTriviaIndexRoute,
   DashboardAdminTriviaGamesGameIdRoute: DashboardAdminTriviaGamesGameIdRoute,

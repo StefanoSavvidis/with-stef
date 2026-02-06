@@ -1,5 +1,5 @@
 import { Link, createFileRoute } from "@tanstack/react-router"
-import { Trophy } from "lucide-react"
+import { Palette, Trophy } from "lucide-react"
 import { Card, Text } from "@/components/retroui"
 
 export const Route = createFileRoute("/_dashboard/admin/")({
@@ -20,6 +20,19 @@ function AdminOverview() {
 								<Text as="h3">Trivia Management</Text>
 								<Text as="p" className="text-sm text-muted-foreground">
 									Create and manage trivia games
+								</Text>
+							</div>
+						</div>
+					</Card>
+				</Link>
+				<Link to="/admin/playground">
+					<Card className="p-4 w-full block hover:shadow-lg transition-shadow">
+						<div className="flex items-center gap-3">
+							<Palette className="w-6 h-6" />
+							<div>
+								<Text as="h3">Component Playground</Text>
+								<Text as="p" className="text-sm text-muted-foreground">
+									Preview components with different color palettes
 								</Text>
 							</div>
 						</div>
