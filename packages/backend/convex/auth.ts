@@ -4,6 +4,7 @@ import { components } from "./_generated/api"
 import type { DataModel } from "./_generated/dataModel"
 import { query } from "./_generated/server"
 import { betterAuth, type BetterAuthOptions } from "better-auth"
+import { username } from "better-auth/plugins"
 import authConfig from "./auth.config"
 import authSchema from "./betterAuth/schema"
 
@@ -49,7 +50,7 @@ export const createAuthOptions = (
 			disableCSRFCheck: true,
 			disableOriginCheck: true,
 		},
-		plugins: [convex({ authConfig })],
+		plugins: [convex({ authConfig }), username()],
 	}
 }
 

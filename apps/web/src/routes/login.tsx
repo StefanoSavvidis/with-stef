@@ -44,6 +44,8 @@ function AlreadyLoggedIn() {
 
 function LoginForm() {
 	const [email, setEmail] = useState("")
+	const [username, setUsername] = useState("")
+	const [identifier, setIdentifier] = useState("")
 	const [password, setPassword] = useState("")
 	const [isSignUp, setIsSignUp] = useState(false)
 	const [error, setError] = useState<string | null>(null)
@@ -51,7 +53,18 @@ function LoginForm() {
 	const navigate = useNavigate()
 
 	const emailId = useId()
+	const usernameId = useId()
+	const identifierId = useId()
 	const passwordId = useId()
+
+	const toggleMode = () => {
+		setIsSignUp(!isSignUp)
+		setEmail("")
+		setUsername("")
+		setIdentifier("")
+		setPassword("")
+		setError(null)
+	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
@@ -63,6 +76,7 @@ function LoginForm() {
 				const result = await authClient.signUp.email({
 					email,
 					password,
+					username,
 					name: email.split("@")[0],
 				})
 				if (result.error) {
@@ -70,13 +84,25 @@ function LoginForm() {
 					return
 				}
 			} else {
-				const result = await authClient.signIn.email({
-					email,
-					password,
-				})
-				if (result.error) {
-					setError(result.error.message ?? "Sign in failed")
-					return
+				const isEmail = identifier.includes("@")
+				if (isEmail) {
+					const result = await authClient.signIn.email({
+						email: identifier,
+						password,
+					})
+					if (result.error) {
+						setError(result.error.message ?? "Sign in failed")
+						return
+					}
+				} else {
+					const result = await authClient.signIn.username({
+						username: identifier,
+						password,
+					})
+					if (result.error) {
+						setError(result.error.message ?? "Sign in failed")
+						return
+					}
 				}
 			}
 			navigate({ to: "/" })
@@ -92,23 +118,63 @@ function LoginForm() {
 			<Card className="w-full max-w-md">
 				<Card.Header>
 					<Card.Title>{isSignUp ? "Sign Up" : "Sign In"}</Card.Title>
-					<Card.Description>Admin Dashboard</Card.Description>
+					<Card.Description>With Stef</Card.Description>
 				</Card.Header>
 				<Card.Content>
 					<form onSubmit={handleSubmit} className="space-y-4">
-						<div>
-							<label htmlFor={emailId} className="block mb-2 font-medium">
-								Email
-							</label>
-							<Input
-								id={emailId}
-								type="email"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
-								required
-								placeholder="you@example.com"
-							/>
-						</div>
+						{isSignUp ? (
+							<>
+								<div>
+									<label htmlFor={emailId} className="block mb-2 font-medium">
+										Email
+									</label>
+									<Input
+										id={emailId}
+										type="email"
+										value={email}
+										onChange={(e) => setEmail(e.target.value)}
+										required
+										placeholder="you@example.com"
+									/>
+								</div>
+
+								<div>
+									<label
+										htmlFor={usernameId}
+										className="block mb-2 font-medium"
+									>
+										Username
+									</label>
+									<Input
+										id={usernameId}
+										type="text"
+										value={username}
+										onChange={(e) => setUsername(e.target.value)}
+										required
+										minLength={3}
+										maxLength={30}
+										placeholder="Choose a username"
+									/>
+								</div>
+							</>
+						) : (
+							<div>
+								<label
+									htmlFor={identifierId}
+									className="block mb-2 font-medium"
+								>
+									Email or Username
+								</label>
+								<Input
+									id={identifierId}
+									type="text"
+									value={identifier}
+									onChange={(e) => setIdentifier(e.target.value)}
+									required
+									placeholder="you@example.com or username"
+								/>
+							</div>
+						)}
 
 						<div>
 							<label htmlFor={passwordId} className="block mb-2 font-medium">
@@ -142,7 +208,7 @@ function LoginForm() {
 						<Button
 							type="button"
 							variant="outline"
-							onClick={() => setIsSignUp(!isSignUp)}
+							onClick={toggleMode}
 							className="w-full justify-center"
 						>
 							{isSignUp

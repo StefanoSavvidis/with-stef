@@ -8,9 +8,13 @@ export default defineSchema({
 		emailVerified: v.boolean(),
 		image: v.optional(v.string()),
 		role: v.optional(v.string()),
+		username: v.string(),
+		displayUsername: v.string(),
 		createdAt: v.number(),
 		updatedAt: v.number(),
-	}).index("email", ["email"]),
+	})
+		.index("email", ["email"])
+		.index("username", ["username"]),
 
 	session: defineTable({
 		expiresAt: v.number(),

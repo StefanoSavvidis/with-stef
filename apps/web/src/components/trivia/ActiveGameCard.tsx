@@ -36,7 +36,7 @@ export function ActiveGameCard({ game }: ActiveGameCardProps) {
 					</Text>
 				</div>
 				<Button asChild>
-					<Link to="/trivia/games/$gameId" params={{ gameId: game._id }}>
+					<Link to="/admin/trivia/games/$gameId" params={{ gameId: game._id }}>
 						Manage
 						<ArrowRight className="w-4 h-4 ml-2" />
 					</Link>

@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { createServerFn } from "@tanstack/react-start"
-import Header from "../components/Header"
+import { Toaster } from "../components/retroui"
 import ConvexProvider from "../integrations/convex/provider"
 import TanStackQueryDevtools from "../integrations/tanstack-query/devtools"
 import { getToken } from "../lib/auth-server"
@@ -33,7 +33,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				content: "width=device-width, initial-scale=1",
 			},
 			{
-				title: "TanStack Start Starter",
+				title: "With Stef",
 			},
 		],
 		links: [
@@ -56,7 +56,6 @@ function RootComponent() {
 	return (
 		<RootDocument>
 			<ConvexProvider initialToken={token}>
-				<Header />
 				<Outlet />
 				<TanStackDevtools
 					config={{
@@ -83,6 +82,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 			</head>
 			<body>
 				{children}
+				<Toaster />
 				<Scripts />
 			</body>
 		</html>

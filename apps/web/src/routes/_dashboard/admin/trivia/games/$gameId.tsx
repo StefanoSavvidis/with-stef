@@ -10,7 +10,9 @@ import { QuestionsList } from "@/components/trivia/QuestionsList"
 import { Button, Text } from "@/components/retroui"
 import { cn } from "@/lib/utils"
 
-export const Route = createFileRoute("/_admin/trivia/games/$gameId")({
+export const Route = createFileRoute(
+	"/_dashboard/admin/trivia/games/$gameId",
+)({
 	component: GameManagementPage,
 })
 
@@ -40,7 +42,7 @@ function GameManagementPage() {
 		return (
 			<div className="space-y-4">
 				<Link
-					to="/trivia"
+					to="/admin/trivia"
 					className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
 				>
 					<ArrowLeft className="w-4 h-4" />
@@ -70,7 +72,7 @@ function GameManagementPage() {
 				gameId: gameId as Id<"triviaGames">,
 				status: "ended",
 			})
-			navigate({ to: "/trivia" })
+			navigate({ to: "/admin/trivia" })
 		} finally {
 			setIsUpdatingStatus(false)
 		}
@@ -83,7 +85,7 @@ function GameManagementPage() {
 		setIsDeleting(true)
 		try {
 			await deleteGame({ gameId: gameId as Id<"triviaGames"> })
-			navigate({ to: "/trivia" })
+			navigate({ to: "/admin/trivia" })
 		} finally {
 			setIsDeleting(false)
 		}
@@ -99,7 +101,7 @@ function GameManagementPage() {
 			<div className="flex items-center justify-between">
 				<div className="space-y-1">
 					<Link
-						to="/trivia"
+						to="/admin/trivia"
 						className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
 					>
 						<ArrowLeft className="w-4 h-4" />

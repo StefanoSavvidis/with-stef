@@ -73,7 +73,7 @@ function GameRow({ game }: { game: Doc<"triviaGames"> }) {
 					<Trash2 className="w-4 h-4" />
 				</Button>
 				<Button variant="outline" size="sm" asChild>
-					<Link to="/trivia/games/$gameId" params={{ gameId: game._id }}>
+					<Link to="/admin/trivia/games/$gameId" params={{ gameId: game._id }}>
 						{game.status === "ended" ? "View" : "Manage"}
 					</Link>
 				</Button>

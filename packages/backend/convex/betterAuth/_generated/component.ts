@@ -32,12 +32,14 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
             | {
                 data: {
                   createdAt: number;
+                  displayUsername: string;
                   email: string;
                   emailVerified: boolean;
                   image?: string;
                   name: string;
                   role?: string;
                   updatedAt: number;
+                  username: string;
                 };
                 model: "user";
               }
@@ -109,6 +111,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -292,6 +296,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -539,12 +545,14 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 model: "user";
                 update: {
                   createdAt?: number;
+                  displayUsername?: string;
                   email?: string;
                   emailVerified?: boolean;
                   image?: string;
                   name?: string;
                   role?: string;
                   updatedAt?: number;
+                  username?: string;
                 };
                 where?: Array<{
                   connector?: "AND" | "OR";
@@ -554,6 +562,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -766,12 +776,14 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                 model: "user";
                 update: {
                   createdAt?: number;
+                  displayUsername?: string;
                   email?: string;
                   emailVerified?: boolean;
                   image?: string;
                   name?: string;
                   role?: string;
                   updatedAt?: number;
+                  username?: string;
                 };
                 where?: Array<{
                   connector?: "AND" | "OR";
@@ -781,6 +793,8 @@ export type ComponentApi<Name extends string | undefined = string | undefined> =
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";

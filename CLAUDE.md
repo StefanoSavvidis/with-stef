@@ -12,7 +12,7 @@ pnpm install
 pnpm dev
 
 # Development (specific app)
-turbo dev --filter=admin
+turbo dev --filter=@with-stef/web
 turbo dev --filter=mobile
 
 # Convex backend (run separately in packages/backend)
@@ -26,9 +26,9 @@ pnpm lint           # Biome lint
 pnpm format         # Biome format
 pnpm check-types    # TypeScript type checking
 
-# Testing (admin app)
-cd apps/admin && pnpm test           # Run all tests
-cd apps/admin && pnpm test -- path/to/file.test.ts  # Run single test file
+# Testing (web app)
+cd apps/web && pnpm test           # Run all tests
+cd apps/web && pnpm test -- path/to/file.test.ts  # Run single test file
 ```
 
 ## Architecture
@@ -37,7 +37,7 @@ cd apps/admin && pnpm test -- path/to/file.test.ts  # Run single test file
 
 ```
 apps/
-├── admin/     # TanStack Start (Vite + React 19), TanStack Router/Query, Tailwind
+├── web/       # TanStack Start (Vite + React 19), TanStack Router/Query, Tailwind
 └── mobile/    # Expo 54, React Native 0.81
 
 packages/
@@ -60,7 +60,7 @@ Uses `@convex-dev/better-auth` Convex Component:
 - Roles: `"user"` (default) and `"admin"` defined in `user.additionalFields`
 - Auth tables managed by the Better Auth component
 
-**Route Protection (Admin)** - Uses Convex React helpers:
+**Route Protection (Web)** - Uses Convex React helpers:
 ```typescript
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react"
 
@@ -98,7 +98,7 @@ import { adminQuery, adminMutation } from "./functions"
 ## Environment Variables
 
 Required in `.env.local`:
-- `VITE_CONVEX_URL` - Convex deployment URL (admin app)
+- `VITE_CONVEX_URL` - Convex deployment URL (web app)
 - `SITE_URL` - Base URL for auth callbacks
 - `CONVEX_DEPLOYMENT` - Convex deployment identifier
 - `BETTER_AUTH_SECRET` - JWT signing secret

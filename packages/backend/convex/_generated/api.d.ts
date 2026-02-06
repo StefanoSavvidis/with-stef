@@ -63,12 +63,14 @@ export declare const components: {
             | {
                 data: {
                   createdAt: number;
+                  displayUsername: string;
                   email: string;
                   emailVerified: boolean;
                   image?: string;
                   name: string;
                   role?: string;
                   updatedAt: number;
+                  username: string;
                 };
                 model: "user";
               }
@@ -139,6 +141,8 @@ export declare const components: {
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -321,6 +325,8 @@ export declare const components: {
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -565,12 +571,14 @@ export declare const components: {
                 model: "user";
                 update: {
                   createdAt?: number;
+                  displayUsername?: string;
                   email?: string;
                   emailVerified?: boolean;
                   image?: string;
                   name?: string;
                   role?: string;
                   updatedAt?: number;
+                  username?: string;
                 };
                 where?: Array<{
                   connector?: "AND" | "OR";
@@ -580,6 +588,8 @@ export declare const components: {
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";
@@ -791,12 +801,14 @@ export declare const components: {
                 model: "user";
                 update: {
                   createdAt?: number;
+                  displayUsername?: string;
                   email?: string;
                   emailVerified?: boolean;
                   image?: string;
                   name?: string;
                   role?: string;
                   updatedAt?: number;
+                  username?: string;
                 };
                 where?: Array<{
                   connector?: "AND" | "OR";
@@ -806,6 +818,8 @@ export declare const components: {
                     | "emailVerified"
                     | "image"
                     | "role"
+                    | "username"
+                    | "displayUsername"
                     | "createdAt"
                     | "updatedAt"
                     | "_id";

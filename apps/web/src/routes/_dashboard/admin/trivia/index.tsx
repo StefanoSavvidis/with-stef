@@ -11,7 +11,7 @@ import { GamesList } from "@/components/trivia/GamesList"
 import { StatsCards } from "@/components/trivia/StatsCards"
 import { Text } from "@/components/retroui"
 
-export const Route = createFileRoute("/_admin/trivia/")({
+export const Route = createFileRoute("/_dashboard/admin/trivia/")({
 	component: TriviaDashboard,
 })
 
